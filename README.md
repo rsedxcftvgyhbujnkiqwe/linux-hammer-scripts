@@ -8,6 +8,8 @@ Usage (supports wildcard for mass vmt creation):
 ```
 genvmt vtf_file.vtf -s <shader type> -p [key value ...]
 ```
+genvmt will automatically determine your file's path, so place it in the desired location first before you generate a vmt for best results.
+
 Parameters:
 ```
 -s: Optional, Shader type. Default is LightmappedGeneric
