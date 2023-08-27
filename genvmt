@@ -1,0 +1,64 @@
+#!/bin/bash
+
+shader_type="LightmappedGeneric"
+
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 <file(s)> [-p key value ...] [-s shader_type]"
+    exit 1
+fi
+
+declare -A key_value_pairs
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -p)
+            key="$2"
+            value="$3"
+            key_value_pairs["$key"]="$value"
+            shift 3
+            ;;
+        -s)
+            shader_type="$2"
+            shift 2
+            ;;
+        *)
+            input_files+=("$1")
+            shift
+            ;;
+    esac
+done
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+for input_file in "${input_files[@]}"; do
+    if [ -f "$input_file" ]; then
+        filename_without_ext="${input_file%.*}"
+
+        rel_path="$(realpath --relative-to="$script_dir" "$input_file")"
+
+        if [[ "$rel_path" == *"materials"* ]]; then
+            basetexture="${rel_path#*materials/}"
+            basetexture="${basetexture%.*}"
+        else
+            basetexture="${filename_without_ext%/*}"
+        fi
+
+        vmt_filename="$filename_without_ext.vmt"
+
+        vmt_content="\"$shader_type\"\n{\n\t\"\$basetexture\" \"$basetexture\"\n"
+
+        for key in "${!key_value_pairs[@]}"; do
+            value="${key_value_pairs[$key]}"
+            vmt_content+="\t\"\$$key\" \"$value\"\n"
+        done
+
+        vmt_content+="}"
+
+        echo -e "$vmt_content" > "$vmt_filename"
+
+        echo "Created $vmt_filename"
+    else
+        echo "Error: '$input_file' is not a valid file."
+    fi
+done
+
