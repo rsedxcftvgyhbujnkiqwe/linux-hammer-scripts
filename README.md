@@ -29,6 +29,9 @@ alias starthammer='proton-call -r "/home/user/.local/share/Steam/steamapps/commo
 
 ## [vtex2](https://github.com/StrataSource/vtex2)
 Creates a vtf file from an image file, or for every image file if given a directory. Useful defaults.
+
+Note that transparency for dxt1 files doesn't work on linux - so you'll want to use dxt5 instead for any textures with transparency. You don't have to break it into two different aliases, I just find this most convenient.
 ```
 alias mkvtf='vtex convert -f dxt1 --no-mips --pointsample'
+alias mkvtf5='vtex convert -f dxt5 --no-mips --pointsample'
 ```
