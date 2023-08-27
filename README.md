@@ -17,6 +17,8 @@ Parameters:
     Used for things such as $decalscale, $ignorez, $alphatest, $envmap, etc.
     To add multiple parameters, add -p multiple times.
     Example: -p A B -p C D
+    Values with spaces in them can be used by encasing in quotes
+    Example: -p spriteorientation "[ 0.50 0.50 ]"
 ```
 
 # Aliases
