@@ -57,7 +57,8 @@ Parameters:
         If width and height are not specified, script will round down to nearest power of 2.
 wild_pattern: Pattern to use for files. Must be enclosed in quotes.
         Example: animvtf "myfile_*.jpg" output
-file_name: Name of gif/vtf to use as output
+file_name: Name of gif/vtf to use as output. 
+        "output" would generate output.gif and output.vtf.
 ```
 If width and height are both not specified, it will take the shortest side, round it down to the nearest power of two, and set it to a square with that resolution.
 
