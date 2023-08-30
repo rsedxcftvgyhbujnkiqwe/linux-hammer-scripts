@@ -22,6 +22,24 @@ Parameters:
     Values with spaces in them can be used by encasing in quotes
     Example: -p spriteorientation "[ 0.50 0.50 ]"
 ```
+## animvtf
+Script that will take a list of images, and create a vtf gif out of them using [vtex2](https://github.com/StrataSource/vtex2).
+
+Usage:
+```
+animvtf [-f format] [-w width -h height] wild_pattern file_name
+```
+Parameters:
+```
+-f: Optional, format override. Use -f dxt5 if transparency on linux is desired. Default is dxt1
+-w, -h: Optional, width and height overridest to be passed to vtex2. Must be powers of two.
+        If width and height are not specified, script will round down to nearest power of 2 for width and height (square)
+wild_pattern: Pattern to use for files. Must be enclosed in quotes.
+    Example: animvtf "myfile_*.jpg" output
+file_name: Name of gif/vtf to use as output
+```
+If width and height are both not specified, it will take the shortest side, round it down to the nearest power of two, and set it to a square with that resolution.
+
 
 # Aliases
 List of some helpful aliases I use for hammer
@@ -38,4 +56,4 @@ Note that transparency for dxt1 files doesn't work on linux - so you'll want to 
 ```
 alias mkvtf='vtex convert -f dxt1 --no-mips --pointsample'
 alias mkvtf5='vtex convert -f dxt5 --no-mips --pointsample'
-```
+``` 
