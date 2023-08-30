@@ -3,7 +3,9 @@ This is a collection of some hammer scripts I use to make my life easier when wo
 
 # Scripts
 ## genvmt
-Usage (supports wildcard for mass vmt creation):
+Generates vmt files based on parameters, automatically determines file path, can generate vmt files en masse with wildcards.
+
+Usage:
 
 ```
 genvmt vtf_file.vtf -s <shader type> -p [key value ...] --enable-proxy [-proxy section_name [-pp key value ...] ]
@@ -12,6 +14,7 @@ genvmt will automatically determine your file's path, so place it in the desired
 
 Parameters:
 ```
+vtf_file.vtf: Path to vtf file. Use wildcards to generate vmt for all matching vtfs.
 -s: Optional, Shader type. Default is LightmappedGeneric
 -p: Optional, Key Value pair for additional shader parameters. 
     -p A B would become "$A" "B" in the vmt. 
