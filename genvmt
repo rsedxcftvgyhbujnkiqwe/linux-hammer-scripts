@@ -1,9 +1,11 @@
 #!/bin/bash
 
 shader_type="LightmappedGeneric"
+enable_proxy=false
+declare -A proxy_sections
 
 if [ $# -eq 0 ]; then
-    echo "Usage: $0 <file(s)> [-p key value ...] [-s shader_type]"
+    echo "Usage: $0 <file(s)> [-p key value ...] [-s shader_type] [--enable-proxy -proxy section -pp key value ...]"
     exit 1
 fi
 
@@ -21,6 +23,30 @@ while [ $# -gt 0 ]; do
             shader_type="$2"
             shift 2
             ;;
+        --enable-proxy)
+            enable_proxy=true
+            shift
+            ;;
+        -proxy)
+            proxy_section="$2"
+            proxy_key_value_pairs=()
+            shift 2
+            while [ "$1" != "-proxy" ] && [ $# -gt 0 ]; do
+                if [ "$1" == "-pp" ]; then
+                    proxy_key="$2"
+                    proxy_value="$3"
+                    if [[ $proxy_value =~ ^[0-9]+\.?[0-9]*$ ]]; then
+                        proxy_key_value_pairs+=("\"$proxy_key\" \"$proxy_value\"")
+                    else
+                        proxy_key_value_pairs+=("\"$proxy_key\" \"\$$proxy_value\"")
+                    fi
+                    shift 3
+                else
+                    break
+                fi
+            done
+            proxy_sections["$proxy_section"]="${proxy_key_value_pairs[*]}"
+            ;;
         *)
             input_files+=("$1")
             shift
@@ -33,29 +59,36 @@ script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 for input_file in "${input_files[@]}"; do
     if [ -f "$input_file" ]; then
         filename_without_ext="${input_file%.*}"
-
         rel_path="$(realpath --relative-to="$script_dir" "$input_file")"
-
         if [[ "$rel_path" == *"materials"* ]]; then
             basetexture="${rel_path#*materials/}"
             basetexture="${basetexture%.*}"
         else
             basetexture="${filename_without_ext%/*}"
         fi
-
         vmt_filename="$filename_without_ext.vmt"
-
         vmt_content="\"$shader_type\"\n{\n\t\"\$basetexture\" \"$basetexture\"\n"
-
         for key in "${!key_value_pairs[@]}"; do
             value="${key_value_pairs[$key]}"
             vmt_content+="\t\"\$$key\" \"$value\"\n"
         done
+        if $enable_proxy; then
+	    vmt_content+="\tProxies\n\t{\n"
+	    for proxy_section in "${!proxy_sections[@]}"; do
+	        vmt_content+="\t\t$proxy_section\n\t\t{\n"
+	        proxy_key_value_pairs=(${proxy_sections[$proxy_section]})
+	        for (( i = 0; i < ${#proxy_key_value_pairs[@]}; i+=2 )); do
+	            proxy_key="${proxy_key_value_pairs[i]}"
+	            proxy_value="${proxy_key_value_pairs[i+1]}"
+	            vmt_content+="\t\t\t$proxy_key $proxy_value\n"
+	        done
+	        vmt_content+="\t\t}\n"
+	    done
+	    vmt_content+="\t}\n"
+	fi
 
-        vmt_content+="}"
-
+	vmt_content+="}"
         echo -e "$vmt_content" > "$vmt_filename"
-
         echo "Created $vmt_filename"
     else
         echo "Error: '$input_file' is not a valid file."

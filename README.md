@@ -21,6 +21,27 @@ Parameters:
     Example: -p A B -p C D
     Values with spaces in them can be used by encasing in quotes
     Example: -p spriteorientation "[ 0.50 0.50 ]"
+--enable-proxy: Optional flag to enable proxies. Creates the "Proxies" section in the vmt.
+-proxy: Specify the proxy section name. Creates a section with the name inside Proxies.
+-pp: Key-Value pair for proxy parameters.
+    -pp key value would become "key" "value" in the proxy section.
+    If the value is a number, it will be used as is
+    If the value is a string, it will be treated as a variable and prefixed with "$".
+    To add multiple proxy sections or parameters, use -proxy and -pp multiple times.
+    Example: --enable-proxy -proxy EntityRandom -pp resultVar offset -pp anotherVar anotherVal -proxy Sine -pp resultVar alpha
+    Would generate the following:
+    Proxies
+	{
+		Sine
+		{
+			"resultVar" "$alpha"
+		}
+		EntityRandom
+		{
+			"resultVar" "$offset"
+			"anotherVar" "$anotherVal"
+		}
+	}
 ```
 ## animvtf
 Script that will take a list of images, and create a vtf gif out of them using [vtex2](https://github.com/StrataSource/vtex2).
