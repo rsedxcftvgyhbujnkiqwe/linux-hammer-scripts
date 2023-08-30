@@ -1,5 +1,5 @@
 # Hammer scripts for linux
-This is a collection of some hammer scripts I use to make my life easier when working with materials/maps in hammer.
+This is a collection of some hammer scripts I use to make my life easier when working with materials/maps in hammer. I am not a bash wizard, I used chatgpt for the scripts.
 
 # Scripts
 ## genvmt
@@ -28,7 +28,7 @@ Parameters:
     If the value is a number, it will be used as is
     If the value is a string, it will be treated as a variable and prefixed with "$".
     To add multiple proxy sections or parameters, use -proxy and -pp multiple times.
-    Example: --enable-proxy -proxy EntityRandom -pp resultVar offset -pp anotherVar anotherVal -proxy Sine -pp resultVar alpha
+    Example: --enable-proxy -proxy EntityRandom -pp resultVar offset -pp anotherVar 1 -proxy Sine -pp resultVar alpha
     Would generate the following:
     Proxies
 	{
@@ -39,7 +39,7 @@ Parameters:
 		EntityRandom
 		{
 			"resultVar" "$offset"
-			"anotherVar" "$anotherVal"
+			"anotherVar" "1"
 		}
 	}
 ```
