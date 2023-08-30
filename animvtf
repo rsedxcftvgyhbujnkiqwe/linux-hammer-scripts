@@ -1,0 +1,63 @@
+#!/bin/bash
+
+usage() {
+    echo "Usage: animvtf [-f format] [-w width -h height] wild_pattern file_name"
+    exit 1
+}
+
+format="dxt1"
+width=""
+height=""
+
+while getopts ":f:w:h:" opt; do
+    case $opt in
+        f)
+            format="$OPTARG"
+            ;;
+        w)
+            width="$OPTARG"
+            ;;
+        h)
+            height="$OPTARG"
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG"
+            usage
+            ;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+if [[ -n "$width" && -n "$height" ]]; then
+    resolution_specified=true
+else
+    resolution_specified=false
+fi
+
+if [ $# -ne 2 ]; then
+    echo "Invalid number of arguments."
+    usage
+fi
+
+wild_pattern="$1"
+file_name="$2"
+
+convert -delay 1 -loop 0 "$wild_pattern" "$file_name.gif"
+
+if $resolution_specified; then
+    width_arg="-w $width"
+    height_arg="-h $height"
+else
+    resolution=$(identify -format "%w %h" "$wild_pattern" | head -n 1)
+    shortest_side=$(echo "$resolution" | awk '{print ($1 < $2) ? $1 : $2}')
+    power_of_2=1
+    while ((power_of_2 * 2 <= shortest_side)); do
+        power_of_2=$((power_of_2 * 2))
+    done
+    width_arg="-w $power_of_2"
+    height_arg="-h $power_of_2"
+fi
+
+vtex convert -f "$format" --no-mips --pointsample $width_arg $height_arg --start-frame 0 "$file_name.gif"
+
