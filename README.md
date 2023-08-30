@@ -6,7 +6,7 @@ This is a collection of some hammer scripts I use to make my life easier when wo
 Usage (supports wildcard for mass vmt creation):
 
 ```
-genvmt vtf_file.vtf -s <shader type> -p [key value ...]
+genvmt vtf_file.vtf -s <shader type> -p [key value ...] --enable-proxy [-proxy section_name [-pp key value ...] ]
 ```
 genvmt will automatically determine your file's path, so place it in the desired location first before you generate a vmt for best results.
 
