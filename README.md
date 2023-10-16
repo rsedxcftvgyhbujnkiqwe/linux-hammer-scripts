@@ -49,6 +49,8 @@ vtf_file.vtf: Path to vtf file. Use wildcards to generate vmt for all matching v
 ## animvtf
 Script that will take a list of images, and create a vtf gif out of them using [vtex2](https://github.com/StrataSource/vtex2).
 
+**THIS DOES NOT WORK CURRENTLY!** vtex2 does not support animated files. Once it does, this will work.
+
 Usage:
 ```
 animvtf [-f format] [-w width -h height] wild_pattern file_name

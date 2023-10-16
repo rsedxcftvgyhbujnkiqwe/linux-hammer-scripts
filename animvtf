@@ -59,5 +59,4 @@ else
     height_arg="-h $power_of_2"
 fi
 
-vtex convert -f "$format" --no-mips --pointsample $width_arg $height_arg --start-frame 0 "$file_name.gif"
-
+vtex convert -f "$format" --no-mips --pointsample $width_arg $height_arg "$file_name.gif"
