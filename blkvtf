@@ -1,0 +1,32 @@
+#!/bin/bash
+
+usage() {
+    echo "Usage: blkvtf [-f format] file_pattern"
+    exit 1
+}
+
+format="dxt1"
+
+while getopts ":f:" opt; do
+    case $opt in
+        f)
+            format="$OPTARG"
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG"
+            usage
+            ;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+if [ "$#" -eq 0 ]; then
+    echo "No file pattern provided."
+    usage
+fi
+
+for file in "$@"; do
+    vtex convert -f "$format" --no-mips --pointsample "$file"
+done
+

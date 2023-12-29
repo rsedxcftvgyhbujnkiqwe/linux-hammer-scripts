@@ -8,7 +8,7 @@ Generates vmt files based on parameters, automatically determines file path, can
 Usage:
 
 ```
-genvmt vtf_file.vtf -s <shader type> -p [key value ...] --enable-proxy [-proxy section_name [-pp key value ...] ]
+genvmt vtf_file.vtf [-s <shader type>] [-p [key value ...] ] [--enable-proxy [-proxy section_name [-pp key value ...] ] ]
 ```
 genvmt will automatically determine your file's path, so place it in the desired location first before you generate a vmt for best results.
 
@@ -46,6 +46,22 @@ vtf_file.vtf: Path to vtf file. Use wildcards to generate vmt for all matching v
 		}
 	}
 ```
+## blkvtf
+Bulk create vtf files based on wildcard pattern.
+
+Usage:
+```
+blkvtf [-f <format>] wild_pattern
+```
+Parameters:
+```
+-f: Optional, format override. Use -f dxt5 if transparency on linux is desired. Default is dxt1
+wild_pattern: Pattern to use for files
+    Example: blkvtf -f dxt5 *.png
+```
+**Script assumes that vtex2 is in your PATH under the name "vtex". If this is not the case, modify the last line of the script as necessary.**
+
+
 ## animvtf
 Script that will take a list of images, and create a vtf gif out of them using [vtex2](https://github.com/StrataSource/vtex2).
 
